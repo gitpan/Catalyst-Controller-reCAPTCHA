@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use base 'Catalyst::Controller';
 use Captcha::reCAPTCHA;
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 
 sub captcha_get : Private {
@@ -24,7 +24,8 @@ sub captcha_check : Private {
         );
     }
     else {
-        $c->stash->{recaptcha_ok} = "User appears not to have submitted a recaptcha";
+        $c->stash->{recaptcha_ok} = $result->{is_valid};
+        $c->stash->{recaptcha_error} = $result->{error} || "User appears not to have submitted a recaptcha";
     }
 
     if ( $result->{is_valid} ) {
@@ -66,8 +67,9 @@ Sets $c->stash->{recaptcha} to be the html form for the L<http://recaptcha.net/>
 captcha_check : Private
 
 Validates the reCaptcha using L<Captcha::reCAPTCHA>.  sets
-$c->stash->{recaptcha_ok} which will be 1 on success or an error
-string provided by L<Captcha::reCAPTCHA> on failure.
+$c->stash->{recaptcha_ok} which will be 1 on success.  If there's an
+error, $c->stash->{recaptcha_error} is set with the error string
+provided by L<Captcha::reCAPTCHA>.
 
 =head2 EXAMPLES
 
