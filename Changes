@@ -1,5 +1,7 @@
 # This file documents the revision history for the perl extension Catalyst::Controller::reCAPTCHA
 
+0.30001 
+        - Don't release modules late at night.
 0.3
         - Significant architectural changes, thanks Bill Moesley
 0.2

@@ -4,7 +4,7 @@ use warnings;
 use base 'Catalyst::Controller';
 use Captcha::reCAPTCHA;
 use Carp 'croak';
-our $VERSION = '0.3';
+our $VERSION = '0.30001';
 
 
 sub captcha_get : Private {
@@ -19,14 +19,14 @@ sub captcha_check : Private {
     my $cap = Captcha::reCAPTCHA->new;
     my $challenge = $c->req->param('recaptcha_challenge_field');
     my $response = $c->req->param('recaptcha_response_field');
-
+    
     unless ( $response && $challenge ) {
         $c->stash->{recaptcha_error} = 'User appears not to have submitted a recaptcha';
         return;
     }
 
     my $key = $c->config->{recaptcha}->{priv_key} || croak 'must set recaptcha priv_key in config';
-
+    
     my $result = $cap->check_answer(
         $key,
         $c->req->address,
@@ -43,7 +43,7 @@ sub captcha_check : Private {
 
     return ($result->{is_valid} = $result->{is_valid});
 }
-}
+
 
 
 
