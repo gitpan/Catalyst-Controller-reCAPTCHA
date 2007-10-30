@@ -3,37 +3,46 @@ use strict;
 use warnings;
 use base 'Catalyst::Controller';
 use Captcha::reCAPTCHA;
-our $VERSION = '0.2';
+use Carp 'croak';
+our $VERSION = '0.3';
 
 
 sub captcha_get : Private {
     my ($self, $c) = @_;
     my $cap = Captcha::reCAPTCHA->new;
     $c->stash->{recaptcha} = $cap->get_html($c->config->{recaptcha}->{pub_key});
+    return;
 }
 
 sub captcha_check : Private {
     my ($self, $c) = @_;
     my $cap = Captcha::reCAPTCHA->new;
-    my $result = {};
-    if ( $c->req->param( 'recaptcha_response_field' ) ) {
-        $result = $cap->check_answer(
-            $c->config->{recaptcha}->{priv_key}, $ENV{'REMOTE_ADDR'},
-            $c->req->param('recaptcha_challenge_field'),
-            $c->req->param('recaptcha_response_field')
-        );
-    }
-    else {
-        $c->stash->{recaptcha_ok} = $result->{is_valid};
-        $c->stash->{recaptcha_error} = $result->{error} || "User appears not to have submitted a recaptcha";
+    my $challenge = $c->req->param('recaptcha_challenge_field');
+    my $response = $c->req->param('recaptcha_response_field');
+
+    unless ( $response && $challenge ) {
+        $c->stash->{recaptcha_error} = 'User appears not to have submitted a recaptcha';
+        return;
     }
 
-    if ( $result->{is_valid} ) {
-        $c->stash->{recaptcha_ok} = 1;
-    }
-    else {
-        $c->stash->{recaptcha_ok} = $result->{error};
-    }
+    my $key = $c->config->{recaptcha}->{priv_key} || croak 'must set recaptcha priv_key in config';
+
+    my $result = $cap->check_answer(
+        $key,
+        $c->req->address,
+        $challenge,
+        $response,
+    );
+
+    croak 'Failed to get valid result from reCaptcha'
+        unless ref $result eq 'HASH' && exists $result->{is_valid};
+
+
+    $c->stash->{recaptcha_error} = $result->{error} || 'Unknown error'
+        unless $result->{is_valid};
+
+    return ($result->{is_valid} = $result->{is_valid});
+}
 }
 
 
