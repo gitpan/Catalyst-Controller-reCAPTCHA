@@ -4,7 +4,7 @@ use warnings;
 use base 'Catalyst::Controller';
 use Captcha::reCAPTCHA;
 use Carp 'croak';
-our $VERSION = '0.4';
+our $VERSION = '0.5';
 
 
 sub captcha_get : Private {
@@ -46,7 +46,8 @@ sub captcha_check : Private {
             unless $result->{is_valid};
 
     $c->stash->{recaptcha_ok} = 1 if $result->{is_valid};
-    return ($result->{is_valid} == $result->{is_valid});
+    $result->{is_valid} == $result->{is_valid};
+    return $result->{is_valid};
 }
 
 
