@@ -27,4 +27,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://dev.catalyst.perl.org/repos/Catalyst/trunk/Catalyst-Controller-reCAPTCHA/
-version: 0.5
+version: 0.6
