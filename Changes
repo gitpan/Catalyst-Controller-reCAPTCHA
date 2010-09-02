@@ -1,4 +1,6 @@
 # This file documents the revision history for the perl extension Catalyst::Controller::reCAPTCHA
+0.6 2 Sep 2010
+       - Fix the result of an overenthusiastic release
 0.6 1 Sep 2010
        - remove stupid $result->{is_valid} == $result->{is_valid} line (thanks ner0x)
 0.5 31 Mar 2010
