@@ -4,7 +4,7 @@ use warnings;
 use base 'Catalyst::Controller';
 use Captcha::reCAPTCHA;
 use Carp 'croak';
-our $VERSION = '0.7';
+our $VERSION = '0.8';
 
 
 sub captcha_get : Private {
@@ -56,7 +56,13 @@ sub captcha_check : Private {
 
 Catalyst::Controller::reCAPTCHA - authenticate people and read books!
 
+WARNING:  Deprecated.  Please use L<Catalyst::TraitFor::Controller::reCAPTCHA> instead.
+
 =head1 SUMMARY
+
+This module has been deprecated and has been replaced with
+L<Catalyst::TraitFor::Controller::reCAPTCHA>.  Please do not use this for new
+projects.  Version 0.8 is very likely the last to be released for this module.
 
 Catalyst::Controller wrapper around L<Capatcha::reCAPTCHA>.  Provides
 a number of C<Private> methods that deal with the recaptcha.
@@ -106,6 +112,11 @@ set with the error string provided by L<Captcha::reCAPTCHA>.
 
 See the t/lib/TestApp example in the
 L<Catalyst::Controller::reCAPTCHA> distribution.
+
+=head2 BUGS
+
+This module is deprecated.  Please report any bugs you find against
+L<Catalyst::TraitFor::Controller::reCAPTCHA>.
 
 =head1 SEE ALSO
 
